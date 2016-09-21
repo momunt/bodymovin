@@ -8,3 +8,4 @@ esprima/
 bodymovinCert.p12
 ZXPSignCmd.exe
 signer.bat
+.DS_Store
