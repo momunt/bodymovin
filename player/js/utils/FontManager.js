@@ -165,12 +165,26 @@ var FontManager = (function(){
                 jLen += 1;
             }
         }
+
+        this.defaultChar = this.getDefaultChar();
     }
 
     function getCharData(char, style, font){
         var i = 0, len = this.chars.length;
         while( i < len) {
             if(this.chars[i].ch === char && this.chars[i].style === style && this.chars[i].fFamily === font){
+                return this.chars[i];
+            }
+            i+= 1;
+        }
+
+        return this.defaultChar;
+    }
+
+    function getDefaultChar(){
+        var i = 0, len = this.chars.length;
+        while( i < len) {
+            if(this.chars[i].ch === "?"){
                 return this.chars[i];
             }
             i+= 1;
@@ -206,6 +220,7 @@ var FontManager = (function(){
     Font.prototype.addChars = addChars;
     Font.prototype.addFonts = addFonts;
     Font.prototype.getCharData = getCharData;
+    Font.prototype.getDefaultChar = getDefaultChar;
     Font.prototype.getFontByName = getFontByName;
     Font.prototype.measureText = measureText;
 
