@@ -9,7 +9,6 @@ function MaskElement(data,element,globalData) {
     this.viewData = new Array(this.masksProperties.length);
     this.maskElement = null;
     this.firstFrame = true;
-    var maskedElement = this.element.maskedElement;
     var defs = this.globalData.defs;
     var i, len = this.masksProperties.length;
 
@@ -31,11 +30,11 @@ function MaskElement(data,element,globalData) {
         if((properties[i].mode == 's' || properties[i].mode == 'i') && count == 0){
             rect = document.createElementNS(svgNS, 'rect');
             rect.setAttribute('fill', '#ffffff');
-            rect.setAttribute('x', '0');
-            rect.setAttribute('y', '0');
-            rect.setAttribute('width', '100%');
-            rect.setAttribute('height', '100%');
+            rect.setAttribute('width', this.element.comp.data ? this.element.comp.data.w : this.element.globalData.compSize.w);
+            rect.setAttribute('height', this.element.comp.data ? this.element.comp.data.h : this.element.globalData.compSize.h);
             currentMasks.push(rect);
+        } else {
+            rect = null;
         }
 
         if(properties[i].mode == 'n' || properties[i].cl === false) {
@@ -123,6 +122,9 @@ function MaskElement(data,element,globalData) {
             lastPath: '',
             prop:ShapePropertyFactory.getShapeProp(this.element,properties[i],3,this.dynamicProperties,null)
         };
+        if(rect){
+            this.viewData[i].invRect = rect;
+        }
         if(!this.viewData[i].prop.k){
             this.drawPath(properties[i],this.viewData[i].prop.v,this.viewData[i]);
         }
@@ -155,12 +157,16 @@ MaskElement.prototype.prepareFrame = function(){
     }
 };
 
-MaskElement.prototype.renderFrame = function () {
+MaskElement.prototype.renderFrame = function (finalMat) {
     var i, len = this.masksProperties.length;
     for (i = 0; i < len; i++) {
         if(this.masksProperties[i].mode !== 'n' && this.masksProperties[i].cl !== false){
             if(this.viewData[i].prop.mdf || this.firstFrame){
                 this.drawPath(this.masksProperties[i],this.viewData[i].prop.v,this.viewData[i]);
+            }
+            if(this.viewData[i].invRect && (this.element.finalTransform.mProp.mdf || this.firstFrame)){
+                this.viewData[i].invRect.setAttribute('x', -finalMat.props[12]);
+                this.viewData[i].invRect.setAttribute('y', -finalMat.props[13]);
             }
             if(this.storedData[i].x && (this.storedData[i].x.mdf || this.firstFrame)){
                 var feMorph = this.storedData[i].expan;

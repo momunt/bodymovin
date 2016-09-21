@@ -24,6 +24,7 @@ var bm_textShapeHelper = (function () {
         var textDocument = textProp.value;
         textDocument.fontSize = 100;
         textDocument.justification = ParagraphJustification.LEFT_JUSTIFY;
+
         textProp.setValue(textDocument);
         var fontProp = dupl.property("Source Text");
         var fontDocument = fontProp.value;
@@ -172,7 +173,6 @@ var bm_textShapeHelper = (function () {
             var fontStyle = textDocument.fontStyle;
             var fontSize = textDocument.fontSize;
             var text = textDocument.allCaps ? textDocument.text.toUpperCase() : textDocument.text;
-            
             var j, jLen = text.length;
             
             if (currentFont !== font) {

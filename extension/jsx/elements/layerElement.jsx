@@ -76,9 +76,9 @@ var bm_layerElement = (function () {
                 curLayer = layerOb;
                 instanceOfArray = [AVLayer, CameraLayer, LightLayer, ShapeLayer, TextLayer];
                 instanceOfArrayLength = instanceOfArray.length;
-                if (curLayer.guideLayer) {
+                /*if (curLayer.guideLayer) {
                     return ob.layerTypes.guide;
-                } else if (curLayer.adjustmentLayer) {
+                } else */if (curLayer.adjustmentLayer) {
                     return ob.layerTypes.adjustment;
                 } else if (curLayer.nullLayer) {
                     return ob.layerTypes.nullLayer;
@@ -109,10 +109,20 @@ var bm_layerElement = (function () {
     function prepareLayer(layerInfo, ind) {
         var layerData = {};
         var layerType = getLayerType(layerInfo);
-        if (layerType === ob.layerTypes.audio || layerType === ob.layerTypes.light || layerType === ob.layerTypes.adjustment || layerType === ob.layerTypes.pholderStill || layerType === ob.layerTypes.pholderVideo || layerType === ob.layerTypes.guide) {
+        if (layerType === ob.layerTypes.audio || layerType === ob.layerTypes.light || layerType === ob.layerTypes.adjustment || layerType === ob.layerTypes.pholderStill || layerType === ob.layerTypes.pholderVideo) {
             layerData.isValid = false;
             layerData.render = false;
         }
+        /*if (layerType === ob.layerTypes.guide) {
+            layerData.isGuide = true;
+            layerData.render = false;
+        }*/
+
+        if(layerInfo.guideLayer){
+            layerData.isGuide = true;
+            layerData.render = false;
+        }
+
         if (layerInfo.enabled === false) {
             layerData.enabled = false;
             layerData.render = false;

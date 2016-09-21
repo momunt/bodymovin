@@ -55,8 +55,8 @@ SVGBaseElement.prototype.createElements = function(){
             feCTr.appendChild(feFunc);
             this.globalData.defs.appendChild(fil);
             var alphaRect = document.createElementNS(svgNS,'rect');
-            alphaRect.setAttribute('width','100%');
-            alphaRect.setAttribute('height','100%');
+            alphaRect.setAttribute('width',this.comp.data ? this.comp.data.w : this.globalData.compSize.w);
+            alphaRect.setAttribute('height',this.comp.data ? this.comp.data.h : this.globalData.compSize.h);
             alphaRect.setAttribute('x','0');
             alphaRect.setAttribute('y','0');
             alphaRect.setAttribute('fill','#ffffff');
@@ -76,29 +76,26 @@ SVGBaseElement.prototype.createElements = function(){
         if(this.data.hasMask){
             this.maskedElement = this.layerElement;
         }
-    }else if(this.data.hasMask){
+    }else if(this.data.hasMask || this.data.tt){
         this.layerElement = document.createElementNS(svgNS,'g');
         if(this.data.tt){
             this.matteElement = document.createElementNS(svgNS,'g');
             this.matteElement.appendChild(this.layerElement);
-            this.appendNodeToParent(this.matteElement);
+            this.baseElement = this.matteElement;
+            //this.appendNodeToParent(this.matteElement);
         }else{
-            this.appendNodeToParent(this.layerElement);
+            this.baseElement = this.layerElement;
+            //this.appendNodeToParent(this.layerElement);
         }
-        this.maskedElement = this.layerElement;
-    }else if(this.data.tt){
-        this.matteElement = document.createElementNS(svgNS,'g');
-        this.matteElement.setAttribute('id',this.layerId);
-        this.appendNodeToParent(this.matteElement);
-        this.layerElement = this.matteElement;
+        if(this.data.hasMask){
+            this.maskedElement = this.layerElement;
+        }
     }else{
-        this.layerElement = this.parentContainer;
+        this.layerElement = document.createElementNS(svgNS,'g');
+        this.baseElement = this.layerElement;
+        //this.appendNodeToParent(this.layerElement);
     }
     if((this.data.ln || this.data.cl) && (this.data.ty === 4 || this.data.ty === 0)){
-        if(this.layerElement === this.parentContainer){
-            this.layerElement = document.createElementNS(svgNS,'g');
-            this.appendNodeToParent(this.layerElement);
-        }
         if(this.data.ln){
             this.layerElement.setAttribute('id',this.data.ln);
         }
@@ -106,15 +103,17 @@ SVGBaseElement.prototype.createElements = function(){
             this.layerElement.setAttribute('class',this.data.cl);
         }
     }
-    if(this.data.ty === 0 && (this.finalTransform.op.k || this.finalTransform.op.p !== 1) && this.layerElement === this.parentContainer){
-        this.layerElement = document.createElementNS(svgNS,'g');
-        this.appendNodeToParent(this.layerElement);
+    if(this.data.ty === 0 && !this.checkMasks()){
+        var cp = document.createElementNS(svgNS, 'clipPath');
+        var pt = document.createElementNS(svgNS,'path');
+        pt.setAttribute('d','M0,0 L'+this.data.w+',0'+' L'+this.data.w+','+this.data.h+' L0,'+this.data.h+'z');
+        var clipId = 'cp_'+randomString(8);
+        cp.setAttribute('id',clipId);
+        this.layerElement.setAttribute('clip-path','url(#'+clipId+')');
+        cp.appendChild(pt);
+        this.globalData.defs.appendChild(cp);
     }
     if(this.data.bm !== 0){
-        if(this.layerElement === this.parentContainer){
-            this.layerElement = document.createElementNS(svgNS,'g');
-            this.appendNodeToParent(this.layerElement);
-        }
         this.setBlendMode();
     }
     if(this.layerElement !== this.parentContainer){
@@ -185,12 +184,13 @@ SVGBaseElement.prototype.createElements = function(){
             }
         }
     }*/
+    this.checkParenting();
 };
 
 SVGBaseElement.prototype.setBlendMode = BaseElement.prototype.setBlendMode;
 
 SVGBaseElement.prototype.renderFrame = function(parentTransform){
-    if(this.data.ty === 3){
+    if(this.data.ty === 3 || this.data.hd){
         return false;
     }
 
@@ -198,10 +198,6 @@ SVGBaseElement.prototype.renderFrame = function(parentTransform){
         return this.isVisible;
     }
     this.lastNum = this.currentFrameNum;
-
-    if(this.data.hasMask){
-        this.maskManager.renderFrame();
-    }
     this.finalTransform.opMdf = this.finalTransform.op.mdf;
     this.finalTransform.matMdf = this.finalTransform.mProp.mdf;
     this.finalTransform.opacity = this.finalTransform.op.v;
@@ -240,16 +236,15 @@ SVGBaseElement.prototype.renderFrame = function(parentTransform){
         this.finalTransform.opMdf = parentTransform.opMdf ? true : this.finalTransform.opMdf;
         this.finalTransform.matMdf = parentTransform.matMdf ? true : this.finalTransform.matMdf;
     }
-    if(this.data.hasMask){
-        if(this.finalTransform.matMdf){
-            this.layerElement.setAttribute('transform',finalMat.to2dCSS());
-        }
-        if(this.finalTransform.opMdf){
-            this.layerElement.setAttribute('opacity',this.finalTransform.opacity);
-        }
-    } else if(this.data.ty === 0 && this.finalTransform.opMdf && (this.finalTransform.op.k || this.finalTransform.op.p !== 1)){
+    if(this.finalTransform.matMdf && this.layerElement){
+        this.layerElement.setAttribute('transform',finalMat.to2dCSS());
+    }
+    if(this.finalTransform.opMdf && this.layerElement){
         this.layerElement.setAttribute('opacity',this.finalTransform.opacity);
-        this.finalTransform.opacity = 1;
+    }
+
+    if(this.data.hasMask){
+        this.maskManager.renderFrame(finalMat);
     }
     return this.isVisible;
 };
@@ -265,11 +260,18 @@ SVGBaseElement.prototype.destroy = function(){
     }
 };
 
-SVGBaseElement.prototype.getDomElement = function(){
-    return this.layerElement;
+SVGBaseElement.prototype.getBaseElement = function(){
+    return this.baseElement;
 };
 SVGBaseElement.prototype.addMasks = function(data){
     this.maskManager = new MaskElement(data,this,this.globalData);
+};
+
+SVGBaseElement.prototype.setMatte = function(id){
+    if(!this.matteElement){
+        return;
+    }
+    this.matteElement.setAttribute("mask", "url(#" + id + ")");
 };
 
 SVGBaseElement.prototype.setMatte = function(id){

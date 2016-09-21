@@ -1,3 +1,39 @@
+## V 4.4.11
+- html and canvas renderer fixes
+- more expressions supported
+- better subtracted mask support on the svg renderer
+- trim paths memory management corrected. If you're using Trim paths with animated strokes please update to this build!
+
+## V 4.4.10
+- fix on canvas nested compositions if only element animated was a mask
+
+## V 4.4.9
+- included preserveAspectRatio for canvas 'xMidYMid' and 'none' supported for now
+
+## V 4.4.8
+- animation new method "setSubframe" to enable subframe rendering (true by default).
+- hidden guided layers and parenting restore
+- split animations export resetting segments
+
+## V 4.4.7
+- Performance improvement
+- Stroke gradient support
+
+## V 4.4.6
+- Nested gradient fix
+
+## V 4.4.5
+- Alpha masks fix
+
+## V 4.4.4
+- performance improvement on redrawing svg
+
+## V 4.4.3
+- gradient fixes
+- transparency fixes
+- more fixes
+- assetsPath param to set where to look for assets
+
 ## V 4.4.2
 - shape color interpolation fix
 

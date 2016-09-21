@@ -35,12 +35,20 @@ var bm_textHelper = (function () {
         ob.s = textDocument.fontSize;
         ob.f = textDocument.font;
         bm_sourceHelper.addFont(textDocument.font, textDocument.fontFamily, textDocument.fontStyle);
-        ob.t = textDocument.allCaps ? textDocument.text.toUpperCase() : textDocument.text; // text to caps if needed
+        if(textDocument.allCaps){
+            ob.t = textDocument.text.toUpperCase();
+        } else {
+            ob.t = textDocument.text;
+        }
         len = ob.t.length;
         bm_textShapeHelper.addTextLayer(layerInfo);
         ob.j = getJustification(textDocument.justification);
         ob.tr = textDocument.tracking;
-        ob.lh = textDocument.baselineLocs[5] - textDocument.baselineLocs[1]; // assume line height is same for each line of text
+        if(textDocument.baselineLocs && textDocument.baselineLocs.length > 5){
+            ob.lh = textDocument.baselineLocs[5] - textDocument.baselineLocs[1];
+        } else {
+            ob.lh = ob.s*1.2;
+        }
         if (textDocument.applyFill) {
             len = textDocument.fillColor.length;
             ob.fc = [];

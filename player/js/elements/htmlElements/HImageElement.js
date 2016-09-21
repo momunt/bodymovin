@@ -1,19 +1,14 @@
 function HImageElement(data,parentContainer,globalData,comp, placeholder){
     this.assetData = globalData.getAssetData(data.refId);
-    this.path = globalData.getPath();
     this._parent.constructor.call(this,data,parentContainer,globalData,comp, placeholder);
 }
 createElement(HBaseElement, HImageElement);
 
 HImageElement.prototype.createElements = function(){
 
-    var imageLoaded = function(){
-        this.imageElem.setAttributeNS('http://www.w3.org/1999/xlink','href',this.path+this.assetData.p);
-    };
-
+    var assetPath = this.globalData.getAssetsPath(this.assetData);
     var img = new Image();
 
-    var parent;
     if(this.data.hasMask){
         var parent = document.createElement('div');
         styleDiv(parent);
@@ -24,29 +19,25 @@ HImageElement.prototype.createElements = function(){
         this.imageElem = document.createElementNS(svgNS,'image');
         this.imageElem.setAttribute('width',this.assetData.w+"px");
         this.imageElem.setAttribute('height',this.assetData.h+"px");
+        this.imageElem.setAttributeNS('http://www.w3.org/1999/xlink','href',assetPath);
         cont.appendChild(this.imageElem);
         this.layerElement = parent;
-        this.appendNodeToParent(parent);
+        this.baseElement = parent;
         this.innerElem = parent;
         this.maskedElement = this.imageElem;
-        img.addEventListener('load', imageLoaded.bind(this), false);
-        img.addEventListener('error', imageLoaded.bind(this), false);
     } else {
         styleDiv(img);
         this.layerElement = img;
-        this.appendNodeToParent(img);
+        this.baseElement = img;
         this.innerElem = img;
     }
-    img.src = this.path+this.assetData.p;
+    img.src = assetPath;
     if(this.data.ln){
         this.innerElem.setAttribute('id',this.data.ln);
     }
+    this.checkParenting();
 };
 
-
-
 HImageElement.prototype.hide = HSolidElement.prototype.hide;
-
 HImageElement.prototype.renderFrame = HSolidElement.prototype.renderFrame;
-
 HImageElement.prototype.destroy = HSolidElement.prototype.destroy;
