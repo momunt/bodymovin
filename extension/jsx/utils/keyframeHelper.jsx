@@ -25,6 +25,27 @@ var bm_keyframeHelper = (function () {
         }
     }
 
+    function getPropertyValueOf(pr, value, roundFlag) {
+        switch (pr.propertyValueType) {
+        case PropertyValueType.SHAPE:
+            var elem = {
+                i : roundFlag ? bm_generalUtils.roundNumber(value.inTangents, 3) :  value.inTangents,
+                o : roundFlag ? bm_generalUtils.roundNumber(value.outTangents, 3) : value.outTangents,
+                v : roundFlag ? bm_generalUtils.roundNumber(value.vertices, 3) : value.vertices
+            };
+            return elem;
+        case PropertyValueType.COLOR:
+            var i, len = value.length;
+            for (i = 0; i < len; i += 1) {
+                //value[i] = Math.round(value[i] * 255);
+                value[i] = Math.round(value[i]*100)/100;
+            }
+            return value;
+        default:
+            return roundFlag ? bm_generalUtils.roundNumber(value, 3) :  value;
+        }
+    }
+
     function getCurveLength(initPos, endPos, outBezier, inBezier) {
         var k, curveSegments = 2, point, lastPoint = null, ptDistance, absToCoord, absTiCoord, triCoord1, triCoord2, triCoord3, liCoord1, liCoord2, ptCoord, perc, addedLength = 0, i, len;
         for (k = 0; k < curveSegments; k += 1) {
@@ -294,11 +315,18 @@ var bm_keyframeHelper = (function () {
         var returnOb = {
             k: exportKeys(prop, frRate, keyframeValues)
         };
-        bm_expressionHelper.checkExpression(prop, returnOb);
+
+        if (prop.numKeys <= 1 && prop.expressionEnabled && !prop.expressionError && prop.expression.indexOf("comp")>-1) {
+            bm_expressionManager.evaluateExpression(prop, returnOb);
+        }else{
+            bm_expressionHelper.checkExpression(prop, returnOb);
+        }
+
         return returnOb;
     }
     
     ob.exportKeyframes = exportKeyframes;
+    ob.getPropertyValueOf = getPropertyValueOf;
     
     return ob;
 }());

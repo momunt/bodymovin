@@ -41,6 +41,8 @@ var bm_textHelper = (function () {
         ob.j = getJustification(textDocument.justification);
         ob.tr = textDocument.tracking;
         ob.lh = textDocument.baselineLocs[5] - textDocument.baselineLocs[1]; // assume line height is same for each line of text
+        confirm(textDocument.baselineLocs);
+        confirm(ob.lh);
         if (textDocument.applyFill) {
             len = textDocument.fillColor.length;
             ob.fc = [];

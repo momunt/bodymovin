@@ -5,7 +5,7 @@
   "main": "./build/player/bodymovin.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bodymovin/bodymovin.git"
+    "url": "git+https://github.com/bodymovin/bodymovin.git"
   },
   "keywords": [
     "animation",
@@ -16,7 +16,7 @@
     "export"
   ],
   "devDependencies": {
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-gzip": "^1.2.0",
     "gulp-jshint": "^1.11.2",
@@ -27,5 +27,13 @@
     "gulp-watch": "^4.3.5",
     "gulp-wrap": "^0.11.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bodymovin/bodymovin/issues"
+  },
+  "homepage": "https://github.com/bodymovin/bodymovin#readme",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": ""
 }

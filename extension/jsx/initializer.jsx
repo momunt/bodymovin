@@ -23,6 +23,7 @@ $.evalFile(extensionPath + 'utils/textShapeHelper.jsx');
 $.evalFile(extensionPath + 'utils/effectsHelper.jsx');
 $.evalFile(extensionPath + 'utils/layerStylesHelper.jsx');
 $.evalFile(extensionPath + 'utils/expressionHelper.jsx');
+$.evalFile(extensionPath + 'utils/expressionManager.jsx');
 $.evalFile(extensionPath + 'utils/cameraHelper.jsx');
 $.evalFile(extensionPath + 'utils/XMPParser.jsx');
 $.evalFile(extensionPath + 'utils/ProjectParser.jsx');

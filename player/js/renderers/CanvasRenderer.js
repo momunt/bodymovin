@@ -321,7 +321,9 @@ CanvasRenderer.prototype.destroy = function () {
 };
 
 CanvasRenderer.prototype.renderFrame = function(num){
+    console.log("renderer rendering frame " + num);
     if((this.renderedFrame == num && this.renderConfig.clearCanvas === true) || this.destroyed || num === null){
+        console.log("exiting render");
         return;
     }
     this.renderedFrame = num;
@@ -341,13 +343,15 @@ CanvasRenderer.prototype.renderFrame = function(num){
     this.canvasContext.closePath();
     this.canvasContext.clip();
 
-    //console.log('--------');
-    //console.log('NEW: ',num);
+    // console.log('--------');
+    // console.log('NEW: '+num);
     var i, len = this.layers.length;
     for (i = 0; i < len; i++) {
         this.elements[i].prepareFrame(num - this.layers[i].st);
     }
     for (i = len - 1; i >= 0; i-=1) {
+        // console.log("rendering element " + i);
+        // console.log(this.elements[i]);
         this.elements[i].renderFrame();
     }
     if(this.renderConfig.clearCanvas !== true){
@@ -355,6 +359,10 @@ CanvasRenderer.prototype.renderFrame = function(num){
     } else {
         this.canvasContext.restore();
     }
+
+    // console.log("trigger entered frame");
+    this.animationItem.trigger('enteredFrame');
+
 };
 
 CanvasRenderer.prototype.hide = function(){

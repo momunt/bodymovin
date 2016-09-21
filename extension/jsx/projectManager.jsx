@@ -71,10 +71,43 @@ var bm_projectManager = (function () {
         }
         return arr;
     }
+
+    function getComposition(name){
+        project = app.project;
+        if (!project) {
+            return;
+        }
+        var i, numItems = project.numItems;
+        for (i = 0; i < numItems; i += 1) {
+            if (getItemType(project.item(i + 1)) === 'Comp' && project.item(i + 1).name==name) {
+                return project.item(i + 1);
+            }
+        }
+        return null
+    }
+
+    function getLayer(comp, name){
+        return comp.layers.byName(name);
+    }
+
+    function getEffect(layer, name){
+        var effects = layer.effect;
+        var i, len = effects.numProperties
+        for (i = 0; i < len; i += 1) {
+            effectElement = effects(i + 1);
+            if(effectElement.name == name){
+                return effectElement;
+            }
+        }
+        return null;
+    }
     
     var ob = {
         checkProject: checkProject,
         getCompositions: getCompositions,
+        getComposition: getComposition,
+        getLayer: getLayer,
+        getEffect: getEffect,
         searchCommands: searchCommands,
         getCommandID: getCommandID
     };

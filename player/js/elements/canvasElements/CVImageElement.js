@@ -8,9 +8,11 @@ createElement(CVBaseElement, CVImageElement);
 
 CVImageElement.prototype.createElements = function(){
     var imageLoaded = function(){
+        console.log(" - image loaded");
         this.globalData.elementLoaded();
     }.bind(this);
     var imageFailed = function(){
+        console.log(" - error loading image");
         this.failed = true;
         this.globalData.elementLoaded();
     }.bind(this);
@@ -20,11 +22,14 @@ CVImageElement.prototype.createElements = function(){
     this.img.addEventListener('error', imageFailed, false);
     this.img.src = this.path+this.assetData.p;
 
+    console.log("loading image with src="+this.path+this.assetData.p);
+
     this._parent.createElements.call(this);
 
 };
 
 CVImageElement.prototype.renderFrame = function(parentMatrix){
+    console.log("CVImageElement inside render Frame");
     if(this.failed){
         return;
     }
@@ -36,7 +41,12 @@ CVImageElement.prototype.renderFrame = function(parentMatrix){
     var finalMat = this.finalTransform.mat.props;
     this.globalData.renderer.ctxTransform(finalMat);
     this.globalData.renderer.ctxOpacity(this.finalTransform.opacity);
+    // console.log("CVImageElement draw image - before - " + this.assetData.p);
+    // console.log("Size:");
+    // console.log("W = " + this.img.width + " H = " + this.img.height );
+    // console.log(this.img);
     ctx.drawImage(this.img,0,0);
+    // console.log("CVImageElement draw image - done");
     this.globalData.renderer.restore(this.data.hasMask);
     if(this.firstFrame){
         this.firstFrame = false;

@@ -1,4 +1,4 @@
-
+ 
 // include gulp
 var gulp = require('gulp'); 
 
@@ -37,7 +37,8 @@ gulp.task('buildPlayer', function(){
         }))
         //.pipe(wrap('(function(window){"use strict";<%= contents %>}(window));'))
         .pipe(wrap(moduleWrap))
-        .pipe(gulp.dest('build/player/'));
+        // .pipe(gulp.dest('build/player1/'));
+        .pipe(gulp.dest('server/player/'));
 });
 gulp.task('buildExpressionModule', function(){
     gulp.src('./player/expressions.html')
@@ -83,7 +84,8 @@ gulp.task('zipSVGPlayer',[], function(){
 
 
 var extensionSource = './extension';
-var extensionDestination = '../../../../Users/Deeandra/AppData/Roaming/Adobe/CEP/extensions/bodymovin';
+// var extensionDestination = '../../../../Users/Deeandra/AppData/Roaming/Adobe/CEP/extensions/bodymovin';
+var extensionDestination = '/Library/Application Support/Adobe/CEP/extensions/com.bodymovin.bodymovin';
 gulp.task('watch-extension', function() {
     gulp.src(extensionSource + '/**/*', {base: extensionSource})
         .pipe(watch(extensionSource, {base: extensionSource}))

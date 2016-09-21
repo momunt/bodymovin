@@ -96,30 +96,46 @@ CVCompElement.prototype.prepareFrame = function(num){
 };
 
 CVCompElement.prototype.renderFrame = function(parentMatrix){
+    // console.log("CVCompElement inside renderFrame");
     if(this._parent.renderFrame.call(this,parentMatrix)===false){
         return;
     }
     if(this.globalData.mdf){
         var i,len = this.layers.length;
         for( i = len - 1; i >= 0; i -= 1 ){
+            // console.log(" - rendering el " + i);
             this.elements[i].renderFrame();
         }
     }
+    // console.log("CVCompElement done with layers");
+
     if(this.data.hasMask){
         this.globalData.renderer.restore(true);
     }
     if(this.firstFrame){
         this.firstFrame = false;
     }
+
     this.parentGlobalData.renderer.save();
     this.parentGlobalData.renderer.ctxTransform(this.finalTransform.mat.props);
     this.parentGlobalData.renderer.ctxOpacity(this.finalTransform.opacity);
+
+    // console.log("at " + this.parentGlobalData.renderer.canvasContext.drawImage);
+    // console.log(this.parentGlobalData.renderer.canvasContext);
+    // console.log(this.canvas);
+    // console.log(this.canvas.toDataURL('png'));
+    
+    // UNCOMMENT:
+    // console.log(this.canvas);
     this.parentGlobalData.renderer.canvasContext.drawImage(this.canvas,0,0,this.data.w,this.data.h);
+    
     this.parentGlobalData.renderer.restore();
 
     if(this.globalData.mdf){
         this.reset();
     }
+
+    console.log("CVCompElement done renderFrame");
 };
 
 CVCompElement.prototype.setElements = function(elems){

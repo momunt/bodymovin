@@ -83,7 +83,6 @@ AnimationItem.prototype.setParams = function(params) {
         this.fileName = params.path.substr(params.path.lastIndexOf('/')+1);
         this.fileName = this.fileName.substr(0,this.fileName.lastIndexOf('.json'));
         xhr.open('GET', params.path, true);
-        xhr.send();
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
                 if(xhr.status == 200){
@@ -97,6 +96,7 @@ AnimationItem.prototype.setParams = function(params) {
                 }
             }
         };
+        xhr.send();
     }
 };
 
@@ -285,6 +285,7 @@ AnimationItem.prototype.resize = function () {
 };
 
 AnimationItem.prototype.gotoFrame = function () {
+    
     if(subframeEnabled){
         this.currentFrame = this.currentRawFrame;
     }else{
@@ -303,6 +304,8 @@ AnimationItem.prototype.renderFrame = function () {
         return;
     }
     this.renderer.renderFrame(this.currentFrame + this.firstFrame);
+
+    // this.trigger('enteredFrame');
 };
 
 AnimationItem.prototype.play = function (name) {
@@ -571,6 +574,9 @@ AnimationItem.prototype.trigger = function(name){
             case 'enterFrame':
                 this.triggerEvent(name,new BMEnterFrameEvent(name,this.currentFrame,this.totalFrames,this.frameMult));
                 break;
+            case 'enteredFrame':
+                this.triggerEvent(name,new BMEnteredFrameEvent(name,this.currentFrame,this.totalFrames,this.frameMult, this));
+                break;
             case 'loopComplete':
                 this.triggerEvent(name,new BMCompleteLoopEvent(name,this.loop,this.playCount,this.frameMult));
                 break;
@@ -589,6 +595,9 @@ AnimationItem.prototype.trigger = function(name){
     }
     if(name === 'enterFrame' && this.onEnterFrame){
         this.onEnterFrame.call(this,new BMEnterFrameEvent(name,this.currentFrame,this.totalFrames,this.frameMult));
+    }
+    if(name === 'enteredFrame' && this.onEnterFrame){
+        this.onEnteredFrame.call(this,new BMEnterFrameEvent(name,this.currentFrame,this.totalFrames,this.frameMult, this));
     }
     if(name === 'loopComplete' && this.onLoopComplete){
         this.onLoopComplete.call(this,new BMCompleteLoopEvent(name,this.loop,this.playCount,this.frameMult));

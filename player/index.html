@@ -10,8 +10,8 @@
         }
         #bodymovin{
             background-color:#ddd;
-            width:500px;
-            height:900px;
+            width:960px;
+            height:540px;
             /*width:800px;
             height:500px;*/
             display:block;
@@ -110,17 +110,32 @@
     var count = 0;
     var animData = {
         container: document.getElementById('bodymovin'),
-        renderer: 'svg',
+        renderer: 'canvas',
         loop: false,
         autoplay: true,
         autoloadSegments: true,
         //animationData: anim2
-        path: 'exports/render/data.json'
+        path: 'exports/ZS_Template_SPLIT_Title_01/data.json'
+        // path: 'exports/ColorPalettes/data.json'
+        // externalComps: ['exports/ColorPalettes/data.json']
+    };
+
+    var animData2 = {
+        container: document.getElementById('bodymovin'),
+        renderer: 'canvas',
+        loop: false,
+        autoplay: true,
+        autoloadSegments: true,
+        //animationData: anim2
+        path: 'exports/ZS_Template_FLOAT_Title_01/data.json'
+        // path: 'exports/ColorPalettes/data.json'
+        // externalComps: ['exports/ColorPalettes/data.json']
     };
 
     var anim;
 
     anim = bodymovin.loadAnimation(animData);
+    animationManager.loadAnimation(animData2);
 
 
 

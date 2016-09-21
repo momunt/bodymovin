@@ -32,6 +32,15 @@ var bm_effectsHelper = (function () {
             return '';
         }
     }
+
+    function getEffectTypeFromExpression(expression){
+        switch (expression.toLowerCase()) {
+        case 'color':
+            return effectTypes.colorControl;
+        default:
+            return '';
+        }
+    }
     
     function findEffectPropertyType(prop) {
         var propertyValueType = prop.propertyValueType;
@@ -226,8 +235,57 @@ var bm_effectsHelper = (function () {
             layerData.ef = effectsArray;
         }
     }
+
+    function evaluateEffectsExpression(expressionStr, layer){
+        var value;
+
+        var regEx = /([^)"]+)\(\"([^)"]+)\"\)\(\"([^)"]+)\"\)/;
+        var matches = regEx.exec(expressionStr);
+        if(matches == null){
+            return null;
+        }
+        
+        var type = matches[1];
+        var effectName = matches[2];
+        var effectProperty = matches[3];
+        confirm("type = effect | efectName = " + effectName + " | effectProperty = "+ effectProperty);
+        // return {"type":"item", "itemType": type, "name": name}
+
+        var effect = bm_projectManager.getEffect(layer, effectName);
+        var searchType = getEffectTypeFromExpression(effectProperty);
+
+        var i, len = effect.numProperties, prop;
+        for (i = 0; i < len; i += 1) {
+            prop = effect.property(i + 1);
+            if(prop.propertyType === PropertyType.PROPERTY){
+                var type = findEffectPropertyType(prop);
+                if(type === searchType){
+                    //effectTypes.noValue;
+                    if (type === effectTypes.noValue) {
+                        // ob.ef.push(exportNoValueControl(prop, frameRate));
+                    } else if(type === effectTypes.sliderControl) {
+                        // ob.ef.push(exportSliderControl(prop, frameRate));
+                    } else if(type === effectTypes.colorControl) {
+                        value = bm_keyframeHelper.getPropertyValueOf(prop, prop.valueAtTime(0, true), true);
+                    } else if(type === effectTypes.dropDownControl) {
+                        // ob.ef.push(exportDropDownControl(prop, frameRate));
+                    } else if(type === effectTypes.dropDownControl) {
+                        // ob.ef.push(exportDropDownControl(prop, frameRate));
+                    } else if(type === effectTypes.customValue) {
+                        // ob.ef.push(exportCustomControl(prop, frameRate));
+                    } else {
+                        // ob.ef.push(exportPointControl(prop, frameRate));
+                    }
+                }
+            }
+        }
+
+        return value;
+       
+    }
     
     ob.exportEffects = exportEffects;
+    ob.evaluateEffectsExpression = evaluateEffectsExpression;
     
     return ob;
 }());

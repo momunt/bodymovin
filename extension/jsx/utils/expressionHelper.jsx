@@ -534,6 +534,7 @@ var bm_expressionHelper = (function () {
 
             expressionStr = 'var $bm_rt;\n' + expressionStr;
             returnOb.x = expressionStr;
+
         }
     }
     
@@ -554,6 +555,10 @@ var bm_expressionHelper = (function () {
             str = str.replace('key(1)[2];', 'key(1)[2].length;');
         }
         return str;
+    }
+
+    function evaluateExpression(expressionStr){
+
     }
 
     ob.checkExpression = checkExpression;

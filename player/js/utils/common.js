@@ -82,6 +82,14 @@ function BMEnterFrameEvent(n,c,t,d){
     this.direction = d < 0 ? -1:1;
 }
 
+function BMEnteredFrameEvent(n,c,t,d,a){
+    this.type = n;
+    this.currentTime = c;
+    this.totalTime = t;
+    this.direction = d < 0 ? -1:1;
+    this.animationItem = a;
+}
+
 function BMCompleteEvent(n,d){
     this.type = n;
     this.direction = d < 0 ? -1:1;

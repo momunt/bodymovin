@@ -73,6 +73,8 @@ CVBaseElement.prototype.checkBlendMode = function(globalData){
 
 
 CVBaseElement.prototype.renderFrame = function(parentTransform){
+    // console.log("CVBaseElement inside renderFrame");
+    // console.log(this.data);
     if(this.data.ty === 3){
         return false;
     }
