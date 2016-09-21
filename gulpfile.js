@@ -84,7 +84,8 @@ gulp.task('zipSVGPlayer',[], function(){
 
 
 var extensionSource = './extension';
-var extensionDestination = '../../../../Users/Deeandra/AppData/Roaming/Adobe/CEP/extensions/bodymovin';
+// var extensionDestination = '../../../../Users/Deeandra/AppData/Roaming/Adobe/CEP/extensions/bodymovin';
+var extensionDestination = '/Library/Application Support/Adobe/CEP/extensions/bodymovin';
 gulp.task('watch-extension', function() {
     gulp.src(extensionSource + '/**/*', {base: extensionSource})
         .pipe(watch(extensionSource, {base: extensionSource}))

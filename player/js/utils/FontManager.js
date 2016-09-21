@@ -177,6 +177,10 @@ var FontManager = (function(){
             }
             i+= 1;
         }
+        // try default font
+        if(font != 'Arial'){
+            return this.getCharData(char, 'Regular', 'Arial');
+        }
 
         return this.defaultChar;
     }
@@ -207,7 +211,9 @@ var FontManager = (function(){
             }
             i += 1;
         }
-        return 'sans-serif';
+
+        //default to Arial
+        return this.getFontByName("ArialMT");
     }
 
     var Font = function(){
