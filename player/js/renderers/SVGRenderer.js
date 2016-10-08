@@ -113,8 +113,14 @@ SVGRenderer.prototype.buildItem  = function(pos){
         return;
     }
     var element = this.createItem(this.layers[pos]);
+
     elements[pos] = element;
-    element.initExpressions();
+    if(expressionsPlugin){
+        if(this.layers[pos].ty === 0){
+            this.globalData.projectInterface.registerComposition(element);
+        }
+        element.initExpressions();
+    }
     this.appendElementInPos(element,pos);
     if(this.layers[pos].tt){
         this.buildItem(pos - 1);

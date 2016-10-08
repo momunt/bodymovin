@@ -1,3 +1,14 @@
+## V 4.4.14
+- fixed bodymovin_light
+- fixed translations with same origin and destination
+
+## V 4.4.13
+- preserveAspectRatio all values for canvas
+- Different vertices between keyframes supported
+- New expressions
+- First effects: Stroke, Fill, Tint.
+- Orient along path
+
 ## V 4.4.12
 - Trim path fix on offsetted shapes
 

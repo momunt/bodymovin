@@ -216,6 +216,7 @@ AnimationItem.prototype.loadSegments = function() {
 };
 
 AnimationItem.prototype.configAnimation = function (animData) {
+    //console.log(JSON.parse(JSON.stringify(animData)));
     //animData.w = Math.round(animData.w/blitter);
     //animData.h = Math.round(animData.h/blitter);
     this.animationData = animData;
@@ -282,7 +283,9 @@ AnimationItem.prototype.checkLoaded = function () {
             expressionsPlugin.initExpressions(this);
         }
         this.renderer.initItems();
-        this.trigger('DOMLoaded');
+        setTimeout(function(){
+            this.trigger('DOMLoaded');
+        }.bind(this),0);
         this.isLoaded = true;
         this.gotoFrame();
         if(this.autoplay){
