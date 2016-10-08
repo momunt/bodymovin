@@ -23,17 +23,40 @@ var ImagePreloader = (function(){
     }
 
     function loadImage(path){
+        console.log("preloading image " + path);
         var img = document.createElement('img');
         img.addEventListener('load', imageLoaded.bind(this), false);
         img.addEventListener('error', imageLoaded.bind(this), false);
         img.src = path;
+    }
+    function loadVideo(path){
+        console.log("preloading video " + path);
+        var vid = document.createElement('video');
+        var self = this;
+        vid.addEventListener('loadeddata', function() {
+
+          if(vid.readyState == 4) {
+            imageLoaded.bind(self);
+          }
+
+        });
+
+        vid.addEventListener('error', imageLoaded.bind(this), false);
+        vid.src = path;
     }
     function loadAssets(assets){
         this.totalAssets = assets.length;
         var i;
         for(i=0;i<this.totalAssets;i+=1){
             if(!assets[i].layers){
-                loadImage.bind(this)(getAssetsPath.bind(this)(assets[i]));
+                var type = assets[i].ty;
+                if(type == 2){
+                    loadImage.bind(this)(getAssetsPath.bind(this)(assets[i]));
+                }
+                // else if(type==9){
+                    // TODO: START PRELOADING FRAMES
+                //     loadVideo.bind(this)(getAssetsPath.bind(this)(assets[i]));
+                // }
                 this.totalImages += 1;
             }
         }

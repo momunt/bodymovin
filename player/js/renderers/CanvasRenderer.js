@@ -47,6 +47,10 @@ CanvasRenderer.prototype.createImage = function (data) {
     return new CVImageElement(data, this, this.globalData);
 };
 
+CanvasRenderer.prototype.createVideo = function (data) {
+    return new CVVideoElement(data, this, this.globalData);
+};
+
 CanvasRenderer.prototype.createComp = function (data) {
     return new CVCompElement(data, this, this.globalData);
 };
@@ -168,6 +172,7 @@ CanvasRenderer.prototype.configAnimation = function(animData){
     this.globalData.fontManager.addFonts(animData.fonts,document.body);
     this.globalData.getAssetData = this.animationItem.getAssetData.bind(this.animationItem);
     this.globalData.getAssetsPath = this.animationItem.getAssetsPath.bind(this.animationItem);
+    this.globalData.getAssetsPathForFrame = this.animationItem.getAssetsPathForFrame.bind(this.animationItem);
     this.globalData.elementLoaded = this.animationItem.elementLoaded.bind(this.animationItem);
     this.globalData.addPendingElement = this.animationItem.addPendingElement.bind(this.animationItem);
     this.globalData.transformCanvas = this.transformCanvas;

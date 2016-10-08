@@ -18,6 +18,8 @@ BaseRenderer.prototype.createItem = function(layer){
     switch(layer.ty){
         case 2:
             return this.createImage(layer);
+        case 9:
+            return this.createVideo(layer);
         case 0:
             return this.createComp(layer);
         case 1:

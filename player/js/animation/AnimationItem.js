@@ -574,6 +574,13 @@ AnimationItem.prototype.getAssetsPath = function (assetData) {
     return path;
 };
 
+AnimationItem.prototype.getAssetsPathForFrame = function (assetData, f) {
+    if(assetData.nf && assetData.nf<f){
+        f = f - Math.floor(f/assetData.nf) * assetData.nf;
+    }
+    return assetData.u + 'frame'+f+'.png';
+}
+
 AnimationItem.prototype.getAssetData = function (id) {
     var i = 0, len = this.assets.length;
     while (i < len) {

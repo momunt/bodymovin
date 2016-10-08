@@ -158,6 +158,7 @@ CVCompElement.prototype.buildItem = CanvasRenderer.prototype.buildItem;
 CVCompElement.prototype.buildAllItems = CanvasRenderer.prototype.buildAllItems;
 CVCompElement.prototype.createItem = CanvasRenderer.prototype.createItem;
 CVCompElement.prototype.createImage = CanvasRenderer.prototype.createImage;
+CVCompElement.prototype.createVideo = CanvasRenderer.prototype.createVideo;
 CVCompElement.prototype.createComp = CanvasRenderer.prototype.createComp;
 CVCompElement.prototype.createSolid = CanvasRenderer.prototype.createSolid;
 CVCompElement.prototype.createShape = CanvasRenderer.prototype.createShape;
