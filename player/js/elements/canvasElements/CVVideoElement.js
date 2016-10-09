@@ -77,9 +77,6 @@ CVVideoElement.prototype.renderFrame = function(parentMatrix){
     
 };
 
-CVVideoElement.prototype.drawFrame = function(){
-};
-
 CVVideoElement.prototype.destroy = function(){
     this.img = null;
     this._parent.destroy.call();

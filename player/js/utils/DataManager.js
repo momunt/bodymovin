@@ -414,14 +414,14 @@ function dataFunctionManager(){
                     }
                     if(lineWidth + cLength > boxWidth){
                         if(fontSize === minFontSize && totalHeight + lineH > boxHeight){
-                            var charTimes = 1;
-                            var ellipsisString = '…';
-                            var ellipsisData = fontManager.getCharData('…', fontData.fStyle, fontData.fFamily);
-                            if(!ellipsisData){
+                            // var charTimes = 1;
+                            // var ellipsisString = '…';
+                            // var ellipsisData = fontManager.getCharData('…', fontData.fStyle, fontData.fFamily);
+                            // if(!ellipsisData){
                                 ellipsisData = fontManager.getCharData('.', fontData.fStyle, fontData.fFamily);
                                 charTimes = 3;
                                 ellipsisString = '...';
-                            }
+                            // }
                             var ellipsisLength = ellipsisData ? charTimes*ellipsisData.w*fontSize/100 : 0;
                             ellipsisString = ellipsisData ? ellipsisString : '';
                             var lastChar = i;

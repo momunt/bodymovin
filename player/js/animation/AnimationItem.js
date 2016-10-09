@@ -581,6 +581,7 @@ AnimationItem.prototype.getAssetsPathForFrame = function (assetData, f) {
     if(assetData.nf && assetData.nf<f){
         f = f - Math.floor(f/assetData.nf) * assetData.nf;
     }
+    f = Math.max(Math.floor(f),1);
     return assetData.u + 'frame'+f+'.png';
 }
 
