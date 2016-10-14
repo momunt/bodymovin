@@ -98,6 +98,7 @@ ICompElement.prototype.buildAllItems = SVGRenderer.prototype.buildAllItems;
 ICompElement.prototype.buildElementParenting = SVGRenderer.prototype.buildElementParenting;
 ICompElement.prototype.createItem = SVGRenderer.prototype.createItem;
 ICompElement.prototype.createImage = SVGRenderer.prototype.createImage;
+ICompElement.prototype.createVideo = SVGRenderer.prototype.createVideo;
 ICompElement.prototype.createComp = SVGRenderer.prototype.createComp;
 ICompElement.prototype.createSolid = SVGRenderer.prototype.createSolid;
 ICompElement.prototype.createShape = SVGRenderer.prototype.createShape;

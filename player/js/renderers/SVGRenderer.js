@@ -33,6 +33,10 @@ SVGRenderer.prototype.createImage = function (data) {
     return new IImageElement(data, this.layerElement,this.globalData,this);
 };
 
+SVGRenderer.prototype.createVideo = function (data) {
+    return new IVideoElement(data, this.layerElement,this.globalData,this);
+};
+
 SVGRenderer.prototype.createComp = function (data) {
     return new ICompElement(data, this.layerElement,this.globalData,this);
 
@@ -60,6 +64,7 @@ SVGRenderer.prototype.configAnimation = function(animData){
     this.layerElement.appendChild(defs);
     this.globalData.getAssetData = this.animationItem.getAssetData.bind(this.animationItem);
     this.globalData.getAssetsPath = this.animationItem.getAssetsPath.bind(this.animationItem);
+    this.globalData.getAssetsPathForFrame = this.animationItem.getAssetsPathForFrame.bind(this.animationItem);
     this.globalData.progressiveLoad = this.renderConfig.progressiveLoad;
     this.globalData.frameId = 0;
     this.globalData.compSize = {

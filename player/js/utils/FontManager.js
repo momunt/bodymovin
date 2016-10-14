@@ -166,11 +166,12 @@ var FontManager = (function(){
             }
         }
 
-        this.defaultChar = this.getDefaultChar();
+        // this.defaultChar = this.getDefaultChar();
     }
 
     function getCharData(char, style, font){
         var i = 0, len = this.chars.length;
+        console.log("GET " + char + " " + style + " " + font);
         while( i < len) {
             if(this.chars[i].ch === char && this.chars[i].style === style && this.chars[i].fFamily === font){
                 return this.chars[i];
@@ -178,11 +179,11 @@ var FontManager = (function(){
             i+= 1;
         }
         // try default font
-        if(font != 'Arial'){
-            return this.getCharData(char, 'Regular', 'Arial');
-        }
+        // if(font != 'ArialMT'){
+        //     return this.getCharData(char, 'Regular', 'ArialMT');
+        // }
 
-        return this.defaultChar;
+        // return this.defaultChar;
     }
 
     function getDefaultChar(){
@@ -204,16 +205,18 @@ var FontManager = (function(){
     }
 
     function getFontByName(name){
+        // console.log("getting font by name " + name);
         var i = 0, len = this.fonts.length;
         while(i<len){
             if(this.fonts[i].fName === name) {
+                // console.log(" - got " + name);
                 return this.fonts[i];
             }
             i += 1;
         }
 
-        //default to Arial
-        return this.getFontByName("ArialMT");
+        //default to NotoSans
+        return this.getFontByName("NotoSans");
     }
 
     var Font = function(){

@@ -38,7 +38,7 @@ gulp.task('buildPlayer', function(){
         //.pipe(wrap('(function(window){"use strict";<%= contents %>}(window));'))
         .pipe(wrap(moduleWrap))
         // .pipe(gulp.dest('build/player/'));
-        .pipe(gulp.dest('../blocks/bodymovin/player_dev/'));
+        .pipe(gulp.dest('../blocks/Player/bodymovin/'));
 });
 gulp.task('buildExpressionModule', function(){
     gulp.src('./player/expressions.html')

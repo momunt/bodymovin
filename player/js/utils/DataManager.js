@@ -399,6 +399,7 @@ function dataFunctionManager(){
                 var totalHeight = 0;
                 var documentText = documentData.t;
                 len = documentText.length;
+                var tryagain = false;
                 for(i=0;i<len;i+=1){
                     newLineFlag = false;
                     if(documentText.charAt(i) === ' '){
@@ -416,31 +417,41 @@ function dataFunctionManager(){
                         cLength = fontManager.measureText(documentText.charAt(i), documentData.f, fontSize);
                     }
                     if(lineWidth + cLength > boxWidth){
-                        if(fontSize === minFontSize && totalHeight + lineH > boxHeight){
-                            // var charTimes = 1;
-                            // var ellipsisString = '…';
-                            // var ellipsisData = fontManager.getCharData('…', fontData.fStyle, fontData.fFamily);
-                            // if(!ellipsisData){
-                                ellipsisData = fontManager.getCharData('.', fontData.fStyle, fontData.fFamily);
-                                charTimes = 3;
-                                ellipsisString = '...';
-                            // }
-                            var ellipsisLength = ellipsisData ? charTimes*ellipsisData.w*fontSize/100 : 0;
-                            ellipsisString = ellipsisData ? ellipsisString : '';
-                            var lastChar = i;
-                            while(lineWidth + ellipsisLength > boxWidth){
-                                charData = fontManager.getCharData(documentText.charAt(lastChar), fontData.fStyle, fontData.fFamily);
-                                cLength = charData.w*fontSize/100;
-                                lineWidth -= cLength;
-                                lastChar -= 1;
+                        if(fontSize === minFontSize && totalHeight + fontSize*lineHPerc > boxHeight){
+                            if(fontManager.chars){
+                                // var charTimes = 1;
+                                // var ellipsisString = '…';
+                                // var ellipsisData = fontManager.getCharData('…', fontData.fStyle, fontData.fFamily);
+                                // if(!ellipsisData){
+                                    ellipsisData = fontManager.getCharData('.', fontData.fStyle, fontData.fFamily);
+                                    charTimes = 3;
+                                    ellipsisString = '...';
+                                // }
+                                var ellipsisLength = ellipsisData ? charTimes*ellipsisData.w*fontSize/100 : 0;
+                                ellipsisString = ellipsisData ? ellipsisString : '';
+                                var lastChar = i;
+                                while(lineWidth + ellipsisLength > boxWidth){
+                                    charData = fontManager.getCharData(documentText.charAt(lastChar), fontData.fStyle, fontData.fFamily);
+                                    cLength = charData.w*fontSize/100;
+                                    lineWidth -= cLength;
+                                    lastChar -= 1;
+                                }
+                                documentText = documentText.substr(0,lastChar) + ellipsisString;
+                                break;
                             }
-                            documentText = documentText.substr(0,lastChar) + ellipsisString;
-                            break;
+                            else{
+                                documentText = documentText.substr(0,i-1) + "...";
+                                break;
+                            }
                         }
                         if(lastSpaceIndex === -1){
-                           //i -= 1;
-                            documentText = documentText.substr(0,i) + "\r" + documentText.substr(i);
-                            len += 1;
+                            if(fontSize>minFontSize){
+                                tryagain = true;
+                                break;
+                            }else{
+                                documentText = documentText.substr(0,i) + "\r" + documentText.substr(i);
+                                len += 1;
+                            }
                         }else {
                             i = lastSpaceIndex;
                             documentText = documentText.substr(0,i) + "\r" + documentText.substr(i+1);
@@ -453,7 +464,7 @@ function dataFunctionManager(){
                     }
                 }
                 totalHeight += fontSize;
-                if(totalHeight < boxHeight || fontSize<=minFontSize){
+                if(!tryagain && (totalHeight < boxHeight || fontSize<=minFontSize)){
                     fit = true;
                 } else {
                     documentText = documentData.t;
